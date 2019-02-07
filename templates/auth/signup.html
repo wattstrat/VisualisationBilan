@@ -1,0 +1,16 @@
+{% extends "auth/auth_base.html" %}
+
+{% load i18n crispy_forms_tags %}
+
+{% block title %}{{ block.super }}{% trans "Sign up" %}{% endblock %}
+
+{% block form %}
+  {% crispy form %}
+
+  <div class="form-message">
+    <p>
+      {% trans "Already signed up?" %} <a href="{% url 'accounts:login' %}">{% trans "Log in" %}</a>.
+    </p>
+  </div>
+{% endblock form %}
+

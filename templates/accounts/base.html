@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'css/wattstrat.css' %}" />
+    {% include "_header.html" with active_nav="account" %}
+{% endblock header %}
+
+{% block title %}{{ block.super }}{% trans " - Account" %}{% endblock %}
+
+{% block menubar %}
+
+<div id="menubar">
+
+<div class="container">
+
+    <img src="{% static 'img/account/user.png' %}" alt="{% trans "Account" %}">
+    <h1>{% block menu-heading %}{% trans "Account" %}{% endblock %}</h1>
+
+    <nav id="menubar-level1">
+        <ul class="nav nav-tabs">
+            <li {% if "account" in active_menus %}class="active"{%endif%}><a href="{% url 'accounts:account' %}">{% trans "User profile" %}</a></li>
+        </ul>
+    </nav>
+</div>
+
+<nav id="menubar-level2">
+</nav>
+
+</div>
+
+{% endblock menubar %}
+
+

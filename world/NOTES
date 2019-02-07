@@ -1,0 +1,6 @@
+# Tips
+
+## Auto create model
+python manage.py ogrinspect world/data/TM_WORLD_BORDERS-0.3.shp WorldBorder \
+    --srid=4326 --mapping --multi
+

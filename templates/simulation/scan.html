@@ -1,0 +1,85 @@
+{% extends "simulation/base.html" %}
+{% block header %}
+    {% include "_header.html" with active_nav="scan" %}
+{% endblock header %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load djng_tags %}
+
+{% block title %}{{ block.super }}{% trans " - Bilan détaillé" %}{% endblock %}
+
+{% block extrahead %}
+{# Angular must be in the head section to trigger ngCloak correctly #}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular{% if not debug %}.min{% endif %}.js"></script>
+{% endblock extrahead %}
+
+{% block scripts %}
+<script src="{% static 'djangular/js/django-angular.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls{% if not debug %}.min{% endif %}.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet{% if debug %}-src{% endif %}.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.css" />
+
+<script src="{% static 'js/common.class.js' %}"></script>
+<script src="{% static 'js/wattstrat.js' %}"></script>
+<script src="{% static 'js/wattstrat-leaflet.js' %}"></script>
+<script src="{% static 'js/simulation-scan.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/wattstrat.css' %}" />
+{% endblock scripts %}
+
+{% block body_class %}class="gray-bg"{% endblock %}
+
+{% block content %}
+
+{% angularjs %}
+<div class="container" ng-app="simulationScan" ng-controller="ScanCtrl">
+    <div class="panel panel-default" id="simulation-create">
+        <div class="panel-body">
+            <h1><img src="{% static "img/simulation/simulation.png" %}" /> {% trans "Energy - GES Territory assessment creation" %}</h1>
+            <p> {% trans "Get a full year detailed assessment of your territories' energy consumption and GES emissions" %}</p>
+
+            <form action="" method="POST" class="form-horizontal">
+                {% crispy form %}
+
+                <div class="form-group">
+                    <label class="control-label col-md-3">{% trans "Territories *" %}</label>
+                    <div class="controls col-md-9">
+                        <input type="text"
+                               class="form-control"
+                               ng-model="selectedGeocode"
+                               placeholder="{%trans 'List the geocodes for the full assessment' %}"
+                               typeahead="geocode.label for geocode in geocodes.match($viewValue)"
+                               typeahead-editable="true"
+                               typeahead-on-select="addGeocode($item); selectedGeocode = '';" />
+                    </div>
+                    <br><br>
+                    <div class="controls col-md-12">
+                        <span class="ws-label ws-label-info pointer"
+                              ng-repeat="geocode in selectedGeocodes">
+                            {% verbatim %}{{ geocodes.cGeocodes[geocode].label }}{% endverbatim %} <a class="close" ng-click="removeGeocode(geocode);">×</a>
+                        </span>
+                    </div>
+                        <input type='hidden' name='simu_type'
+                               value='scan'>
+                    <input type='hidden' name='geocodes' ng-model="csvGeocodes"  value="{% verbatim %}{{ csvGeocodes() }}{% endverbatim %}" />
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12 text-center">
+                  <input type="submit" class="ws-btn ws-big-btn" 
+                         value="{% trans 'Create' %}">
+                    </div>
+                </div>
+                
+                <ws-dynamic-map selected-geocodes="selectedGeocodes" get-fill-color="selectedGeocodes.length ? '#a2ebff' : null">
+
+                </ws-dynamic-map>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endangularjs %}
+
+{% endblock content %}

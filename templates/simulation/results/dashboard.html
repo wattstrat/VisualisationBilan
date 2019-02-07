@@ -1,0 +1,74 @@
+{% extends "simulation/results/base.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load djng_tags %}
+
+{% block extrahead %}
+{# Angular must be in the head section to trigger ngCloak correctly #}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular{% if not debug %}.min{% endif %}.js"></script>
+{% endblock extrahead %}
+
+{% block styles %}
+<link href="{% static 'css/multiple-select.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/wattstrat.css' %}" />
+{% endblock styles %}
+
+{% block scripts %}
+<script>
+  simulations = {{ simulations | default:'[]' | safe }};
+</script>
+<script src="{% static 'djangular/js/django-angular.js' %}"></script>
+<script src="{% static 'js/elif.js' %}"></script>
+<script src="{% static 'js/simulations-dashboard.js' %}"></script>
+<script src="{% static 'js/jquery.multiple.select.js' %}"></script>
+{% endblock scripts %}
+
+{% block results_content %}
+<div class="container">
+
+{% angularjs %}
+<div ng-app="simulationsDashboard" ng-controller="DashboardCtrl" ng-cloak id="simulationsDashboard" class="row">
+    <div ng-repeat="simulation in simulations" class="col-md-3">
+        <div class="simulation-grid-cell">
+          <header title="{{ simulation.name }}">{{ simulation.name }}</header>
+	  <header>
+            <a href="#" data-toggle="modal" data-target="#removal" simulation-id="{{simulation.shortid}}" title="Supprimer"> &#x1F5D1; </a>
+	  </header>
+
+            <div class="simulation">
+                <!--<div class="title">
+                    <strong>{{ simulation.creator }}</strong>
+                    <br/>
+                    <span class="text-muted">{{ simulation.date | date:'dd.MM.yyyy' }}</span>
+                </div>-->
+
+                <div class="text-center" >
+                    <a class="ws-btn" href="{% verbatim %}{{ simulation.get_results_url() }}{% endverbatim %}">{% trans "Results and visualization" %}</a>
+                    <a class="ws-btn" href="{% verbatim %}{{ simulation.get_basic_download_url() }}{% endverbatim %}" target="_blank" simulation-id="{{simulation.shortid}}">{% trans "Data in xls format" %} </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="removal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{% trans "Suppression de la simulation" %}</h4>
+            </div>
+            <div class="modal-body">
+                {% crispy removal_form %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+{% endangularjs %}
+{% endblock results_content %}

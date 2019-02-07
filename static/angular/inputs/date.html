@@ -1,0 +1,22 @@
+<div class="input-group">
+    <input class="form-control"
+           name="{{ name }}"
+           type="text"
+           datepicker-localdate type="text"
+           datepicker-popup="dd/MM/yyyy"
+           min-date="minDate"
+           max-date="maxDate"
+           ng-model="dateModel"
+           is-open="opened"
+           ng-required="required"
+           ng-click="open($event)" />
+    <span class="input-group-btn">
+        <button type="button"
+                class="btn btn-default"
+                ng-click="open($event)">
+            <i class="glyphicon glyphicon-calendar"></i>
+        </button>
+    </span>
+</div>
+
+<ng-transclude></ng-transclude>

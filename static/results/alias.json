@@ -1,0 +1,42 @@
+{
+    "Réseau électrique - Tous les moyens de production - Décomposés": {
+	"varname": "Alias_ElecProduction_example",
+	"includes": ["Supply_Electricitygrid_Dispatchable_Biomass_All_prod_biomass",
+		     "Supply_Electricitygrid_Dispatchable_HydroStep_All_prod_hydrostep",
+		     "Supply_Electricitygrid_Dispatchable_HydroLake_All_prod_hydrolake",
+		     "Supply_Electricitygrid_Dispatchable_Waste_All_prod_waste",
+		     "Supply_Electricitygrid_Dispatchable_Nuclear_All_prod_nuc",
+		     "Supply_Electricitygrid_Dispatchable_Coal_All_prod_coal",
+		     "Supply_Electricitygrid_Dispatchable_Gas_All_prod_gas",
+		     "Supply_Electricitygrid_Dispatchable_Oil_All_prod_oil",
+		     "Supply_Electricitygrid_Dispatchable_Interco_All_prod_interco",
+		     "Supply_Electricitygrid_Fatal_Wind_All_prod_wind",
+		     "Supply_Electricitygrid_Fatal_PV_All_prod_pv",
+		     "Supply_Electricitygrid_Fatal_HydroRun_All_prod_hydrorun"
+		    ],
+	"tags": ["prod","elec", "eolien", "mix"]
+    },
+    "Réseau électrique - Tous les moyens de production - Sommés": {
+	"varname": "Alias_Production_sum_example",
+	"includes": ["Supply_Electricitygrid_Dispatchable_Biomass_All_prod_biomass",
+		     "Supply_Electricitygrid_Dispatchable_HydroStep_All_prod_hydrostep",
+		     "Supply_Electricitygrid_Dispatchable_HydroLake_All_prod_hydrolake",
+		     "Supply_Electricitygrid_Dispatchable_Waste_All_prod_waste",
+		     "Supply_Electricitygrid_Dispatchable_Nuclear_All_prod_nuc",
+		     "Supply_Electricitygrid_Dispatchable_Coal_All_prod_coal",
+		     "Supply_Electricitygrid_Dispatchable_Gas_All_prod_gas",
+		     "Supply_Electricitygrid_Dispatchable_Oil_All_prod_oil",
+		     "Supply_Electricitygrid_Dispatchable_Interco_All_prod_interco",
+		     "Supply_Electricitygrid_Fatal_Wind_All_prod_wind",
+		     "Supply_Electricitygrid_Fatal_PV_All_prod_pv",
+		     "Supply_Electricitygrid_Fatal_HydroRun_All_prod_hydrorun"
+		    ],
+	"aggregate": true,
+	"tags": ["prod","elec", "eolien", "mix"]
+    },
+    "Réseau de gaz - Injections": {
+	"varname": "Alias_Gasgrid",
+	"includes": ["Summary_Gasgrid_Consumption"],
+	"tags": ["prod","gaz", "naturel", "biogaz"]
+    }
+}

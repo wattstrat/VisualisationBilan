@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load i18n staticfiles %}
+
+{% block header %}
+    {% include "_header.html" %}
+{% endblock header %}
+
+{% block body_class %}id="presentation"{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row text-center" id="introduction">
+        <h2>{% block introduction-header %}Contact{% endblock introduction-header %}</h2>
+        <p>{% block introduction-text %}{% endblock introduction-text %}</p>
+    </div>
+
+    
+    <div id="main-presentation">
+        {% block main-presentation %}{% endblock main-presentation %}
+    </div>
+</div>
+
+<div id="images-band">
+    <div class="row">
+        {% block images-band %}{% endblock images-band %}
+    </div>
+</div>
+{% endblock content %}
+

@@ -1,0 +1,18 @@
+{% extends "auth/auth_base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}{{ block.super }}Connexion{% endblock %}
+
+{% block form_heading %}Connexion{% endblock %}
+
+{% block form %}
+  {% crispy form %}
+
+  <div class="form-message">
+    <p>
+      Vous n'avez pas de compte ? <a href="{% url 'accounts:signup' %}">Inscrivez-vous</a>.
+    </p>
+  </div>
+{% endblock form %}
+

@@ -1,0 +1,29 @@
+{% extends "simulation/base.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+
+{% block header %}
+    {% include "_header.html" with active_nav="results" %}
+{% endblock header %}
+
+{% block title %}{{ block.super }}{% trans " - Results" %}{% endblock %}
+
+{%  block content %}
+
+    {%  if request.user.account.results_locked %}
+        <div class="container">
+            <div class="alert alert-danger">
+                {%  blocktrans %}
+                    The results vizualisation is locked on this account.
+                    For more informations, please contact us.
+                {%  endblocktrans %}
+            </div>
+        </div>
+    {%  else %}
+        {%  block results_content %}
+        {%  endblock results_content %}
+    {% endif %}
+
+{%  endblock content %}
+

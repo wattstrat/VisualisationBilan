@@ -1,0 +1,33 @@
+{% extends "accounts/base.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="container">
+
+    {% crispy user_display user_display.display_helper %}
+    
+    <div class="text-center">
+        <a href="{% url 'accounts:user_edit' %}" class="ws-btn ws-big-btn">{% trans "Edit User" %}</a>
+        <a href="{% url 'accounts:password-change' %}" class="ws-btn ws-big-btn" >{% trans "Change password" %}</a>
+    </div>
+    
+    <hr />
+    
+    {% crispy account_display account_display.display_helper %}
+    
+    <div class="text-center">
+        <a href="{% url 'accounts:account_edit' %}" class="ws-btn ws-big-btn">{% trans "Edit Account" %}</a>
+    </div>
+    
+    <br><br>
+</div>
+
+
+
+{% endblock %}
+
+

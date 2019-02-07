@@ -1,0 +1,14 @@
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}You're receiving this email because you signed up at {{ site_name }}.{% endblocktrans %}
+
+{% trans "Please click on the following link to validate your account:" %}
+{{ protocol }}://{{ domain }}{% url 'accounts:email-confirm' uidb64=uid token=token %}
+
+{% trans "Your login email, in case you've forgotten, is this email address:" %} {{ user.get_username }}
+
+{% trans "Thanks for using our site!" %}
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+
+{% endautoescape %}
+

@@ -1,0 +1,42 @@
+.ol-legend-scaledcolor {
+    text-align: left;
+    line-height: 18px;
+    color: #555;
+    position: unset;
+}
+.ol-legend-scaledcolor.shown {
+    display: inline-block;
+}
+.ol-legend-scaledcolor.hide {
+    display: none;
+}
+.ol-legend-scaledcolor.legend-title h4{
+    margin: 0 0 5px;
+    color: black;
+    font-weight: 900;
+}
+.ol-legend-scaledcolor.ol-legend-scaledcolor-elm i{
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: .7
+}
+.ol-legend-scaledcolor.ol-legend-scaledcolor-elm{
+    float: left;
+    clear: left;
+    display: inline-flex;
+}
+
+.ol-legend-scaledcolor.ol-legend-scaledcolor-elm-txt {
+}
+.ol-legend-scaledcolor.ol-legend-scaledcolor-info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: #fff;
+    background: rgba(255, 255, 255, .9);
+    box-shadow: 0 0 15px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+    float: right;
+		       
+}

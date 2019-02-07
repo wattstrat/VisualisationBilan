@@ -1,0 +1,384 @@
+{% extends "simulation/results/base.html" %}
+
+{% block header %}
+  {% if simulationType == 'data' %}
+  {% include "_header.html" with active_nav="data" %}
+  {% else %}
+  {% include "_header.html" with active_nav="results" %}
+  {% endif %}
+{% endblock header %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load djng_tags %}
+
+{% block extrahead %}
+{# Angular must be in the head section to trigger ngCloak correctly #}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular{% if not debug %}.min{% endif %}.js"></script>
+{% endblock extrahead %}
+
+{% block scripts %}
+<script>
+  simulations = {{ simulations | default:'[]' | safe }};
+  current_simulation = {{ current_simulation | default:'{"name": "Unknown", "shortid": "None"}' | safe }};
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.4.2/ol{% if debug %}-debug{% endif %}.css" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/openlayers/ol3-layerswitcher.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/openlayers/ol-popup.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ModalPopup.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/openlayers/ol-LocationSearch.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/openlayers/ol-Mesure.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/openlayers/ol-legend-scaledcolor.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/openlayers/ol-style-switcher.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/openlayers/ol-download.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/openlayers/ol-centermap.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome{% if not debug %}.min{% endif %}.css" />
+    
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery{% if not debug %}.min{% endif %}.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill{% if not debug %}.min{% endif %}.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.4.2/ol{% if debug %}-debug{% endif %}.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4{% if debug %}-src{% endif %}.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin{% if not debug %}.min{% endif %}.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.3.4/chroma{% if not debug %}.min{% endif %}.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-format/1.2.0/d3-format{% if not debug %}.min{% endif %}.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver{% if not debug %}.min{% endif %}.js"></script>
+
+    <script src="{% static 'js/openlayers/ol-LocationSearch.js' %}"></script>
+    <script src="{% static 'js/openlayers/ol-Mesure.js' %}"></script>
+    
+    <script src="{% static 'js/openlayers/ol3-layerswitcher.js' %}"></script>
+    <script src="{% static 'js/openlayers/ol-popup.js' %}"></script>
+    <script src="{% static 'js/openlayers/ol-legend.js' %}"></script>
+    <script src="{% static 'js/openlayers/ol-legend-scaledcolor.js' %}"></script>
+    <script src="{% static 'js/openlayers/ol-style-switcher.js' %}"></script>
+    <script src="{% static 'js/openlayers/ol-download.js' %}"></script>
+    <script src="{% static 'js/openlayers/ol-centermap.js' %}"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-messages{% if not debug %}.min{% endif %}.js"></script>
+    <script src="{% static 'djangular/js/django-angular.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls{% if not debug %}.min{% endif %}.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment{% if not debug %}.min{% endif %}.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.14/amcharts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.14/serial.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.14/pie.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.14/themes/light.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.14/themes/patterns.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.14/plugins/export/export{% if not debug %}.min{% endif %}.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.14/plugins/export/export.css" type="text/css" media="all" />
+<link rel="stylesheet" href="{% static 'css/modalDialog.css' %}" type="text/css" media="all" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3{% if not debug %}.min{% endif %}.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.0.2/chroma.min.js"></script>
+
+<link rel="stylesheet" href="{% static 'css/fSelect.css' %}">
+<script src="{% static 'js/fSelect.js' %}"></script>
+
+<script src="{% static 'js/common.class.js' %}"></script>
+<script src="{% static 'js/wattstrat.js' %}"></script>
+<script src="{% static 'js/wattstrat-ol.js' %}"></script>
+<script src="{% static 'js/chart.js' %}" defer></script>
+<script src="{% static 'js/simulation-results.js' %}" defer></script>
+
+<script src="{% static 'js/results/graph.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/wattstrat.css' %}" />
+
+{% endblock scripts %}
+
+{% block menubar %}
+{% endblock menubar %}
+{% block messages %}{% endblock %}
+
+{% block results_content %}
+<div id="simuresulttitle">
+  {% if simulationType == 'data' %}
+  <h3> Téléchargement de données sur la base du bilan {{ dataYear }}</h3>
+  {% else %}
+  <h3> Simulation {{ simuName }}</h3>
+  {% endif %}
+</div>
+<div id="simulation-results">
+  <div class="container">
+    {% include "_messages.html" %}
+
+    {% angularjs %}
+
+    <div ng-app="simulationResults"  ng-controller="ResultsCtrl" ng-cloak>
+      <div ng-controller="MessagesCtrl">
+        <div class="alert alert-danger" ng-show="messages.state.error">
+          <a class="close" ng-click="messages.hide('error')">×</a>
+          Le nombre maximum de graphiques (20) a été atteint.
+        </div>
+      </div>
+
+      <div class="form-group">
+	<div ng-controller="resultVariablesCtrl" >
+	  <div class="controls col-md-4">
+	    <h2>{% trans "1. Data" %} <a data-toggle="modal" id="glossary var" data-target="#variables-modal" >&#9432;</a></h2>
+	    <input type="text"
+		   class="form-control"
+		   ng-model="selectedResultVariables"
+		   typeahead="var.label for var in resultvariables.match($viewValue)"
+		   typeahead-editable="true"
+		   typeahead-on-select="results.addVariable($item); selectedResultVariables = ''" />
+	    <br />
+	    <span class="ws-label ws-label-info pointer"
+		  ng-repeat="var in results.variables">
+              {% verbatim %}{{ var.label }}{% endverbatim %} <a class="close" ng-click="results.removeVariable(var) ;">×</a>
+	    </span>
+	  </div>
+	</div>
+      </div>
+      <div id="graphInput">
+        <div ng-repeat='graph in results.graphs'>
+          <div class="controls col-md-4">
+
+      <h2>{% trans "2. Perimeter" %} </h2>
+            <div class="col-md-6 form-group"> 
+              <label for="start-date">{% trans "Start date" %}</label><br>
+              <div id="start-date" ws-date date-model="graph.startDate"></div>
+            </div>
+
+            <div class="col-md-6 form-group">
+              <label for="end-date">{% trans "End date" %}</label><br>
+              <div id="end-date" ws-date date-model="graph.endDate"></div>
+            </div>
+
+            <div ng-controller="resultGeocodesCtrl" >
+              <div class="controls col-md-12">
+                <label for="geocode">{% trans "Geographic zone" %} <a data-toggle="modal" id="glossary var" data-target="#geocodes-modal" >&#9432;</a></label><br>
+                <input type="text"
+                       class="form-control"
+                       ng-model="selectedGeocode"
+                       typeahead="geocode.label for geocode in geocodes.match($viewValue)"
+                       typeahead-editable="true"
+                       typeahead-on-select="results.addGeocode($item); selectedGeocode = ''" />
+                <br />
+                <span class="ws-label ws-label-info pointer"
+                      ng-repeat="geocode in results.geocodes">
+{% verbatim %}{{ geocodes.cGeocodes[geocode].label }}{% endverbatim %} <a class="close" ng-click="results.removeGeocode(geocode);">×</a>
+                </span>
+              </div>
+            </div>
+	    {% if simulationType ==  "results" %}
+            <div ng-controller="SimulationsCtrl" >
+	      <div class="simulationsselection">
+		<label for="simulationscompare">{% trans "Compare simulations" %}</label><br>
+		<select id="simulationscompare" multiple="multiple">
+		  <optgroup label="Simulations">
+		    {% verbatim %}
+		    <option ng-repeat="simulation in simulations" value="{{ simulation.shortid }}" ng-selected="simulation.shortid == current_simulation.shortid" >{{ simulation.name }}</option>
+		    {% endverbatim %}
+		  </optgroup>
+		</select>
+	      </div>
+	    </div>
+	    {% endif %}
+            <div class="col-sm-6 text-left">
+              <input type="button"
+                     class="ws-close-btn"
+                     value="&times;"
+                     ng-click="results.removeGraph($index)"
+                     ng-show="results.graphs.length > 1"/>
+            </div>
+          </div>
+
+
+            <!-- <div class="col-sm-6 text-left">
+              <input type="button"
+                     class="ws-close-btn"
+                     value="&times;"
+                     ng-click="results.removeGraph($index)"
+                     ng-show="results.graphs.length > 1"/>
+            </div>
+            <div class="col-sm-2" ng-show="$last && results.graphs.length < results.MAX_GRAPHS">
+              <button class="ws-btn"
+                      style="margin-top: 2em;"
+                      ng-click="results.addGraph()">
+                {% trans "Add graph" %}
+              </button>
+            </div>
+          </div> -->
+            <div class="controls col-md-4">
+	      <div {% if simulationType == 'data' %}style="display:none;" {% endif %}>
+		<h2>3. <select id="typeResult" name="typeResult" ng-model="download"
+			       ng-change="results.changeDownload()">
+		    <option value="graphic" selected="selected">{% trans "Graphique" %}</option>
+		    <option value="download">{% trans "Téléchargement" %}</option>
+		    </select>
+		</h2>
+	      </div>
+	      {% if simulationType == 'data' %}
+	      <div class="show-panel">	     
+		<h2>{% trans "3. Téléchargement" %}</h2>
+	      </div>
+	      {% endif %}
+	      <center>
+		{% if simulationType != 'data' %}
+		<div class="show-panel">
+		  <div class="col-md-6 form-group">
+		    <label for="graphic-type">{% trans "Type of graphic" %}</label><br>
+		    <select id="graphic-type"
+			    class="form-control"
+			    ng-model="graph.graphicType"
+			    ng-options="graphType as graphType.label for graphType in results.graphTypes">
+		    </select>
+		  </div>
+		</div>
+		{% endif %}
+		<div class="col-md-6 form-group">
+		  <label for="precision">{% trans "Precision" %}</label><br>
+		  <select id="precision"
+			  class="form-control"
+			  ng-model="graph.precision"
+			  ng-options="precision as precision.label for precision in results.precisions"
+			  >
+		  </select>
+		</div>
+		<div class="dwl-panel" {% if simulationType != 'data' %}style="display:none;" {% endif %}>
+	    	  <div class="col-md-6 form-group">
+		    <div>
+		      <input type="checkbox" id="sumgeocode"
+			     ng-model="graph.sumgeocode">
+		      <label for="sumgeocode">{% trans "Somme Territoires" %}</label>
+		    </div>
+		  </div>
+		</div>
+		{% if simulationType != 'data' %}
+		<div class="show-panel">	     
+		  <div class="col-md-6 form-group" ng-show="graph.graphicType.name == 'map'">
+		    <div>
+		      <input type="checkbox" id="batiments"
+			     ng-model="graph.batiments">
+		      <label for="batiments">{% trans "Vos batiments" %}</label>
+		    </div>
+		  </div>
+		  <div class="col-md-6 form-group" ng-show="graph.graphicType.name != 'map'">
+		    <div>
+		      <input type="checkbox" id="sumgeocode"
+			     ng-model="graph.sumgeocode">
+		      <label for="sumgeocode">{% trans "Somme Territoires" %}</label>
+		    </div>
+		    
+		  </div>
+		</div>
+		{% endif %}
+              </center>
+	      <div class="dwl-panel" {% if simulationType != 'data' %}style="display:none;" {% endif %}>
+		  <a class="ws-btn ws-big-btn"
+                   ng-class="{
+                        'disabled': results.noParametersSelected() || results.noGeocodesSelected()
+                   }"
+			   ng-click="downloadResults()"
+			   ng-disabled="results.noParametersSelected() || results.noGeocodesSelected()">
+                    {% trans "Download" %}</a>
+	      </div>
+	      {% if simulationType != 'data' %}
+	      <div class="show-panel">
+		  	      <a class="ws-btn ws-big-btn"
+                   ng-class="{
+                        'disabled': results.noParametersSelected() || results.noGeocodesSelected()
+                   }"
+			   ng-click="loadCharts()"
+			   ng-disabled="results.noParametersSelected() || results.noGeocodesSelected()">
+                   {% trans "Show" %}
+                  </a>
+	      </div>
+	      {% endif %}
+	    </center>
+	    
+            <div ng-show="chartsLoading" class="text-center m-t-2">
+                <img src="{% static 'img/loading.gif' %}" />
+            </div>
+          </div>
+    <div id="variables-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{% trans "Available variables" %}</h4>
+                </div>
+               <div class="modal-body edit-content">
+                <div ng-repeat="mykey in results.allKeys | orderBy:'mykey'">
+                  <a href="#" ng-click="showDetails = ! showDetails">{{ mykey }}</a>
+                  <div id="{{ mykey }}" ng-show="showDetails">
+                    <div ng-repeat="mysubkey in results.allSubKeys[mykey] | orderBy:'mysubkey'" ng-style="{'margin-left': '20px'}">
+                        <a href="#" ng-click="showDetails1 = ! showDetails1">{{mysubkey}} </a>
+                          <div ng-show="showDetails1">
+                            <li ng-repeat="myvar in results.allVars[mykey][mysubkey] | orderBy:'index_label'" ng-style="{'margin-left': '40px'}">
+                                <a ng-click="results.toggleVariable(myvar)">{{myvar.index_label}}</a><div class="{{myvar.varname}} coche" style="display: none"><i class="fa fa-check" aria-hidden="true"><!--&#x2713;--></i></div>
+                            </li>
+                          </div>
+                        
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+     </div>
+
+     <div id="geocodes-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{% trans "Available " %}</h4>
+                </div>
+               <div class="modal-body edit-content">
+                 <div class="geocodesinfos order" ng-repeat="geocodes in results.allGeoInfos">
+		   <div class="geoinfos" ng-repeat="geocode in geocodes">
+		     <div ng-if="geocode.includes.length > 1">
+                       <a href="#" ng-click="showDetails = ! showDetails">{{ geocode.label }}</a>
+                       <div id="{{ geocode.label }}" ng-show="showDetails">
+			 <div ng-show="showDetails">
+                           <li ng-repeat="myvar in geocode.includes" ng-style="{'margin-left': '20px'}">
+                             <a ng-click="results.toggleGeocode(myvar)">{{ myvar.labelinfo }}</a>
+			     <div class="{{myvar.geocode}} coche" style="display: none">
+			       <i class="fa fa-check" aria-hidden="true"><!--&#x2713;--></i>
+			     </div>
+                           </li>
+			 </div>
+                       </div>
+		     </div>
+                  <div ng-if="geocode.includes.length == 1">
+                    <a ng-click="results.toggleGeocode(geocode.includes[0])">{{ geocode.includes.0.labelinfo }}</a>
+		    <div class="{{geocode.includes.0.geocode}} coche" style="display: none">
+		      <i class="fa fa-check" aria-hidden="true"><!--&#x2713;--></i>
+		    </div>
+		  </div>
+                </div>
+              </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+     </div>
+
+
+    {% endangularjs %}
+<br><br><br><br><br>
+</div>
+</div>
+    </div>
+
+            <div id="charts-wrapper" ng-show="chartsVisible && !chartsLoading" class="col-md-10 col-md-offset-1">
+            </div>
+	    <br />
+    </div>
+    <dialog id="workingRendering" class="modalDialog">
+      <div>
+	<h3>Generating MAP file</h3>
+	<p>Your browser is currently working to create the MAP file</p>
+	<center><img src="{% static 'img/loading.gif' %}"></center>
+      </div>
+      
+    </dialog>
+
+{% endblock results_content %}

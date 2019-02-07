@@ -1,0 +1,35 @@
+from path import Path
+
+FRANCE_COUNTIES_PER_PROVINCE = {
+    'FR99111': ['FR99275', 'FR99277', 'FR99278', 'FR99291', 'FR99292', 'FR99293', 'FR99294', 'FR99295'],
+    'FR99121': ['FR99208', 'FR99210', 'FR99251', 'FR99252'],
+    'FR99122': ['FR99202', 'FR99260', 'FR99280'],
+    'FR99123': ['FR99227', 'FR99276'],
+    'FR99124': ['FR99218', 'FR99228', 'FR99236', 'FR99237', 'FR99241', 'FR99245'],
+    'FR99125': ['FR99214', 'FR99250', 'FR99261'],
+    'FR99126': ['FR99221', 'FR99258', 'FR99271', 'FR99289'],
+    'FR99131': ['FR99259', 'FR99262'],
+    'FR99141': ['FR99254', 'FR99255', 'FR99257', 'FR99288'],
+    'FR99142': ['FR99267', 'FR99268'],
+    'FR99143': ['FR99225', 'FR99239', 'FR99270', 'FR99290'],
+    'FR99152': ['FR99244', 'FR99249', 'FR99253', 'FR99272', 'FR99285'],
+    'FR99153': ['FR99222', 'FR99229', 'FR99235', 'FR99256'],
+    'FR99154': ['FR99216', 'FR99217', 'FR99279', 'FR99286'],
+    'FR99172': ['FR99224', 'FR99233', 'FR99240', 'FR99247', 'FR99264'],
+    'FR99173': ['FR99209', 'FR99212', 'FR99231', 'FR99232', 'FR99246', 'FR99265', 'FR99281', 'FR99282'],
+    'FR99174': ['FR99219', 'FR99223', 'FR99287'],
+    'FR99182': ['FR99201', 'FR99207', 'FR99226', 'FR99238', 'FR99242', 'FR99269', 'FR99273', 'FR99274'],
+    'FR99183': ['FR99203', 'FR99215', 'FR99243', 'FR99263'],
+    'FR99191': ['FR99211', 'FR99230', 'FR99234', 'FR99248', 'FR99266'],
+    'FR99193': ['FR99204', 'FR99205', 'FR99206', 'FR99213', 'FR99283', 'FR99284'],
+    'FR99194': ['FR9922A', 'FR9922B']}
+
+GEO_DATA_INPUT_DIR = Path(__file__).parent.parent / 'resources' / 'geo_data'
+PY_OUT_DIR = Path(__file__).parent.parent / 'wattstrat' / 'simulation' / 'geo_data'
+SHAPES_OUT_DIR = Path(__file__).parent.parent / 'static' / 'geo' / 'maps'
+GEOCODES_OUT_DIR = Path(__file__).parent.parent / 'static' / 'geo' / 'geocodes'
+
+COUNTRY = 'country'
+COUNTIES = 'counties'
+CITIES = 'cities'
+TERRITORY_SCALES = [COUNTIES, CITIES]

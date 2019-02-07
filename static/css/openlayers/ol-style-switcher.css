@@ -1,0 +1,15 @@
+.ol-style-switcher {
+    /* left: 50%; */
+    /* -webkit-transform: translateX(-50%); */
+    /* -ms-transform: translateX(-50%); */
+    /* transform: translateX(-50%); */
+    top: 5px;
+    right: 5em;
+}
+
+.ol-style-switcher.hide {
+    display:none;
+}
+.ol-style-switcher.shown {
+    display:block;
+}

@@ -1,0 +1,19 @@
+
+.location-search {
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: 0px;
+}
+.ol-touch .location-search {
+    top: 5px;
+}
+
+.location-search button {
+    display: inline;
+}
+
+.location-search input {
+    display: inline;
+}

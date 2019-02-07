@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load staticfiles i18n crispy_forms_tags%}
+
+{% block title %}{{ block.super }} - {% trans "Territorial energy simulations" %} {% endblock %}
+
+{% block body_class %}id="home"{% endblock %}
+
+{% block messages %}{% endblock %}
+
+{% block splash %}
+
+<div class="jumbotron corporate-jumbo">
+    
+    {% include "_messages.html" %}
+    
+    <div class="container">
+        <div class="row">
+            {% if user.is_anonymous %}
+                <div class="col-sm-5 col-sm-offset-4 col-md-4 col-md-center text-center panel p-2">
+                    {% crispy signup_form %}
+                </div>
+            {% endif %}
+ 
+            {% if user.is_authenticated %}
+            <script>
+            window.location.href = location.href + 'simulation/'
+             </script>
+            {% endif %}
+
+
+        </div>
+        
+    </div>
+</div>
+<script>
+function init() {
+var vidDefer = document.getElementsByTagName('iframe');
+for (var i=0; i<vidDefer.length; i++) {
+if(vidDefer[i].getAttribute('data-src')) {
+vidDefer[i].setAttribute('src',vidDefer[i].getAttribute('data-src'));
+} } }
+window.onload = init;
+</script>
+{% endblock splash %}
