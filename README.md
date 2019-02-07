@@ -132,11 +132,6 @@ python manage.py compilemessages
 Les fichiers *.mo sont ignorés par git, il faut donc les compiler sur le serveur de prod
 également.
 
-# TODO
-* update duplicate mega link for geocodes et metadatas
-* update link for postgresql dump on mega
-* update instructions on load data in PostgreSQL
-
 [0]: https://www.python.org/
 [1]: https://www.djangoproject.com/
 [2]: https://www.mongodb.org/
